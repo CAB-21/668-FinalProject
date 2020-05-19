@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <title>IS 668 Gradebook</title>
+    </head>
+
+	<style>
+       .row {
+            justify-content: center;
+            align-items: center;
+        	}
+
+        table, th, td {
+                        border: 1px solid black;
+                        }
+    </style>
+
+    <body>
+        <div class="container">
+            <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+                <a class="navbar-brand" href="http://barneskershner.pythonanywhere.com/">Gradebook</a>
+                <a class="navbar-brand" href="http://barneskershner.pythonanywhere.com/edit/">Edit</a>
+                    {% if current_user.is_authenticated %}
+                        <a class="navbar-brand" href="{{ url_for('logout') }}">Log out</a>
+                    {% else %}
+                        <a class="navbar-brand" href="{{ url_for('login') }}">Log in</a>
+                    {% endif %}
+            </nav>
+        </div>
+
+{% if current_user.is_authenticated %}
+        <div class="container">
+            <div class="row">
+				<p><b>Roster and Gradebook</b></p>
+            </div><br />
+            Student Roster:
+            <table>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Major</th>
+                    <th>Email</th>
+                </tr>
+                {% for student in students %}
+                <div class="row" style="margin-bottom: 1ex">
+                    <div>
+                        <tr>
+                            <td>{{ student.first_name }}</td>
+                            <td>{{ student.last_name }}</td>
+                            <td>{{ student.student_major }}</td>
+                            <td>{{ student.student_email }}</td>
+                        </tr>
+                    </div>
+                </div>
+                {% endfor %}
+            </table><br />
+            All Grades:
+            <br />
+            <br />
+            <table>
+                <tr>
+                    <th>Student</th>
+                    <th>Assignment</th>
+                    <th>Grade</th>
+                </tr>
+                {% for graded_assignment in graded_assignments %}
+                    <tr>
+                        <td>{{ graded_assignment.ref_student.first_name }} {{ graded_assignment.ref_student.last_name }}</td>
+                        <td>{{ graded_assignment.ref_assignment.assignment_name }}</td>
+                        <td>{{ graded_assignment.grade }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+{% endif %}
+    </body>
+</html>

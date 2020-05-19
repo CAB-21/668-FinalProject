@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <title>Edit - IS 668 Gradebook</title>
+    </head>
+
+	<style>
+       .row {
+            justify-content: center;
+            align-items: center;
+        	}
+    </style>
+
+    <body>
+
+		  <div class="container">
+            <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+				<a class="navbar-brand" href="http://barneskershner.pythonanywhere.com/">Gradebook</a>
+				<a class="navbar-brand" href="http://barneskershner.pythonanywhere.com/edit/">Edit</a>
+
+
+                    {% if current_user.is_authenticated %}
+                        <a class="navbar-brand" href="{{ url_for('logout') }}">Log out</a>
+                    {% else %}
+                        <a class="navbar-brand" href="{{ url_for('login') }}">Log in</a>
+                    {% endif %}
+
+		  </nav>
+		  </div>
+
+{% if current_user.is_authenticated %}
+        <div class="container">
+
+            <div class="row">
+				<p><b>Edit Roster and Gradebook!</b></p>
+            </div>
+
+            Add New Student:
+            <form action="{{ url_for('add_student') }}" method="POST">
+                    <input name="fname" type="text" placeholder="First Name" />
+                    <input name="lname" type="text" placeholder="Last Name" />
+                    <input name="major" type="text" placeholder="Major" />
+                    <input name="email" type="text" placeholder="Email" />
+                    <input type="submit" class="btn btn-success" value="Add" />
+            </form>
+
+            Remove Student:
+            <form action="{{ url_for('remove_student') }}" method="POST">
+                <label for="remove_a_student"></label>
+                <select id="student" name="student_id">
+                    {% for student in students %}
+                        <option value="{{ student.student_id }}">{{ student.first_name }} {{ student.last_name }}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit">
+            </form>
+
+            Edit Grade:
+            <form action="{{ url_for('edit_grade') }}" method="POST">
+                <label for="edit_a_grade"></label>
+                <select id="student" name="student_id">
+                    {% for student in students %}
+                        <option value="{{ student.student_id }}">{{ student.first_name }} {{ student.last_name }}</option>
+                    {% endfor %}
+                </select>
+                <select id="assignment" name="assignment_id">
+                    {% for assignment in assignments %}
+                        <option value="{{ assignment.assignment_id }}">{{ assignment.assignment_name }}</option>
+                    {% endfor %}
+                </select>
+                <input name="new_grade" type="number" placeholder="New Grade" />
+                <input type="submit">
+            </form>
+
+            Add New Assignment:
+            <form action="{{ url_for('add_assignment') }}" method="POST">
+                    <input name="aname" type="text" placeholder="Assignment Name" />
+                    <input type="submit" class="btn btn-success" value="Add" />
+            </form>
+
+            Remove Assignment:
+            <form action="{{ url_for('remove_assignment') }}" method="POST">
+                <label for="remove_an_assignment"></label>
+                <select id="assignment" name="assignment_id">
+                    {% for assignment in assignments %}
+                        <option value="{{ assignment.assignment_id }}">{{ assignment.assignment_name }}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit">
+            </form>
+
+
+
+        </div>
+{% endif %}
+
+    </body>
+</html>
