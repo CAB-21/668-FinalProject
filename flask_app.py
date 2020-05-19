@@ -7,6 +7,7 @@ from flask_login import login_user, LoginManager, UserMixin, login_required, log
 from werkzeug.security import check_password_hash
 
 app = Flask(__name__)
+app.config["DEBUG"] = True
 
 SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
     username="BarnesKershner",
